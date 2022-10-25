@@ -1,11 +1,10 @@
 <template>
-  <div v-if="postsprops.length > 0">
-    <h3>Посты {{ postsCount }}</h3>
+  <div @load="countPostsNow" v-if="postsprops.length > 0">
+    <h3>Посты {{ postsCountf }}</h3>
     <post-item
       :post="post"
       :key="post.id"
       @remove="$emit('remove', post)"
-      @change="$emit('change', postsprops)"
       v-for="post in postsprops"
     />
   </div>
@@ -21,7 +20,12 @@ export default {
       type: Array,
       required: true,
     },
-    postsCount: { type: Number },
+    postsCountf: { type: Number },
+  },
+  methods: {
+    countPostsNow() {
+      this.$emit("load", this.postsprops);
+    },
   },
 };
 </script>

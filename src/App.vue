@@ -28,11 +28,11 @@
     </my-dialog>
 
     <post-list
+      :postsCountf="postsCountf"
       style="align-self: flex"
-      @change="countPostsNow"
       @remove="removePost"
+      @load="countPostsNow"
       :postsprops="posts"
-      :postsCount="postsCounter"
     />
     <div v-if="isPostLoading">*** идет загрузка***</div>
   </div>
@@ -48,10 +48,10 @@ export default {
   data() {
     return {
       posts: [],
-      postsCounter: 0,
       dialogVisible: false,
       limit: 10,
       isPostLoading: false,
+      postsCountf: 0,
       selectedOption: "",
       sortOptions: [
         { value: "titlehoff", name: "По названию" },
@@ -61,8 +61,9 @@ export default {
   },
 
   methods: {
-    countPostsNow(postsCounter) {
-      postsCounter = 5;
+    countPostsNow() {
+      this.postsCountf = this.posts.length;
+      console.log(this.posts.length);
     },
     clearAll() {
       while (this.posts.length > 0) {
@@ -98,6 +99,14 @@ export default {
   },
   mounted() {
     this.fetchPosts(10);
+  },
+  watch: {
+    posts: {
+      handler(val, oldVal) {
+        this.countPostsNow();
+      },
+      deep: false,
+    },
   },
 };
 </script>
