@@ -2,15 +2,26 @@
   <div class="app">
     <div style="display: flex">
       <my-button class="crtBtn" @click="showDialog"> Создать пост </my-button>
-      <my-button class="crtBtn" @click="fetchPosts">Получить посты</my-button>
       <my-input
         v-model="limit"
         placeholder="лимит"
         type="number"
         class="inlimit"
-        >Лимит</my-input
+      >
+        Лимит</my-input
+      >
+      <my-button class="crtBtn" @click="fetchPosts(limit)"
+        >Получить посты: {{ limit }} шт.</my-button
+      >
+
+      <my-button @click="clearAll" class="crtBtnclr crtBtn"
+        >Очистить посты</my-button
       >
     </div>
+    <div class="filters">
+      <my-select v-model="selectedOption" :options="sortOptions" />
+    </div>
+
     <my-dialog v-model:show="dialogVisible">
       <h4>Создание поста</h4>
       <post-form @create="createPost" />
@@ -18,8 +29,10 @@
 
     <post-list
       style="align-self: flex"
+      @change="countPostsNow"
       @remove="removePost"
       :postsprops="posts"
+      :postsCount="postsCounter"
     />
     <div v-if="isPostLoading">*** идет загрузка***</div>
   </div>
@@ -35,12 +48,27 @@ export default {
   data() {
     return {
       posts: [],
+      postsCounter: 0,
       dialogVisible: false,
       limit: 10,
       isPostLoading: false,
+      selectedOption: "",
+      sortOptions: [
+        { value: "titlehoff", name: "По названию" },
+        { value: "bodyan", name: "По описанию" },
+      ],
     };
   },
+
   methods: {
+    countPostsNow(postsCounter) {
+      postsCounter = 5;
+    },
+    clearAll() {
+      while (this.posts.length > 0) {
+        this.posts.pop();
+      }
+    },
     createPost(post) {
       this.posts.push(post);
       this.dialogVisible = false;
@@ -51,10 +79,11 @@ export default {
     showDialog() {
       this.dialogVisible = true;
     },
-    async fetchPosts() {
+    async fetchPosts(limit) {
       try {
         this.isPostLoading = true;
         setTimeout(async () => {
+          this.limit = limit;
           const response = await axios.get(
             "https://jsonplaceholder.typicode.com/posts?_limit=" + this.limit
           );
@@ -68,7 +97,7 @@ export default {
     },
   },
   mounted() {
-    this.fetchPosts();
+    this.fetchPosts(10);
   },
 };
 </script>
@@ -85,11 +114,26 @@ export default {
   display: block;
 }
 .crtBtn {
-  margin: 10px 15px 15px 0;
+  margin: 10px 15px 15px 0px;
 }
+
+.crtBtnclr {
+  background-color: red;
+  color: white;
+}
+
 .inlimit {
-  max-height: 32px;
-  max-width: 100px;
+  max-height: 33px;
+  max-width: 50px;
+  margin: 10px 5px;
+}
+.filters {
+  display: flex;
+  justify-content: space-between;
 }
 </style>
 
+
+function newFunction() {
+  return 3;
+}
