@@ -26,7 +26,7 @@ export default {
   width: 100%;
   border: 1px solid green;
   border-radius: 5px;
-  margin: 10px 0 0 0;
+  /*margin: 10px 5px 15px 0;*/
   padding: 5px;
 }
 </style>

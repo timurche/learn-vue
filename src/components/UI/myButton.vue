@@ -13,8 +13,8 @@ export default {
 <style scoped>
 .button {
   padding: 8px 5px;
-  color: black;
-  background: none;
+  /*color: black;
+  background: none;*/
   transition: 300ms;
   border: 1px solid black;
   border-radius: 5px;

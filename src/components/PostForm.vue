@@ -38,6 +38,7 @@ export default {
 
 <style scoped>
 .postInput {
+  margin: 10px 0 0;
 }
 form {
   display: flex;
