@@ -19,6 +19,7 @@
       >
     </div>
     <div class="filters">
+      <h4>Сортировка:</h4>
       <my-select v-model="selectedOption" :options="sortOptions" />
     </div>
 
@@ -31,8 +32,7 @@
       :postsCountf="postsCountf"
       style="align-self: flex"
       @remove="removePost"
-      @load="countPostsNow"
-      :postsprops="posts"
+      :postsprops="sortedPosts"
     />
     <div v-if="isPostLoading">*** идет загрузка***</div>
   </div>
@@ -54,8 +54,8 @@ export default {
       postsCountf: 0,
       selectedOption: "",
       sortOptions: [
-        { value: "titlehoff", name: "По названию" },
-        { value: "bodyan", name: "По описанию" },
+        { value: "title", name: "По названию" },
+        { value: "body", name: "По описанию" },
       ],
     };
   },
@@ -63,7 +63,6 @@ export default {
   methods: {
     countPostsNow() {
       this.postsCountf = this.posts.length;
-      console.log(this.posts.length);
     },
     clearAll() {
       while (this.posts.length > 0) {
@@ -90,7 +89,7 @@ export default {
           );
           this.posts = this.posts.concat(response.data);
           this.isPostLoading = false;
-        }, 2000);
+        }, 1000);
       } catch (e) {
         /** alert(e);*/
       } finally {
@@ -100,12 +99,26 @@ export default {
   mounted() {
     this.fetchPosts(10);
   },
+
+  computed: {
+    sortedPosts() {
+      return [...this.posts].sort((post1, post2) =>
+        post1[this.selectedOption]?.localeCompare(post2[this.selectedOption])
+      );
+    },
+  },
+
   watch: {
     posts: {
       handler(val, oldVal) {
         this.countPostsNow();
       },
-      deep: false,
+      deep: true,
+    },
+    selectedOption(newValue) {
+      this.posts.sort((post1, post2) =>
+        post1[newValue]?.localeCompare(post2[newValue])
+      );
     },
   },
 };
@@ -132,17 +145,13 @@ export default {
 }
 
 .inlimit {
-  max-height: 33px;
+  /*max-height: 33px;*/
   max-width: 50px;
-  margin: 10px 5px;
+  margin: 10px 5px 15px 10px;
 }
 .filters {
   display: flex;
-  justify-content: space-between;
+  justify-content: none;
+  margin: 0 0 15px 0;
 }
 </style>
-
-
-function newFunction() {
-  return 3;
-}

@@ -27,6 +27,6 @@ export default {
   border: 1px solid green;
   border-radius: 5px;
   /*margin: 10px 5px 15px 0;*/
-  padding: 5px;
+  padding: 8px 5px;
 }
 </style>

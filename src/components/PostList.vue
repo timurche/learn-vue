@@ -1,12 +1,14 @@
 <template>
-  <div @load="countPostsNow" v-if="postsprops.length > 0">
-    <h3>Посты {{ postsCountf }}</h3>
-    <post-item
-      :post="post"
-      :key="post.id"
-      @remove="$emit('remove', post)"
-      v-for="post in postsprops"
-    />
+  <div v-if="postsprops.length > 0">
+    <h3>Посты: {{ postsCountf }} шт.</h3>
+    <transition-group name="">
+      <post-item
+        :post="post"
+        :key="post.id"
+        @remove="$emit('remove', post)"
+        v-for="post in postsprops"
+      />
+    </transition-group>
   </div>
   <h3 v-else>Нет постов :'(</h3>
 </template>
@@ -21,11 +23,6 @@ export default {
       required: true,
     },
     postsCountf: { type: Number },
-  },
-  methods: {
-    countPostsNow() {
-      this.$emit("load", this.postsprops);
-    },
   },
 };
 </script>
