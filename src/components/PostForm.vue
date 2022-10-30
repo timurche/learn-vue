@@ -29,7 +29,6 @@ export default {
     createPost() {
       this.post.id = (new Date().getTime() / 1000).toString();
       this.$emit("create", this.post);
-      this.post = {};
     },
   },
 };

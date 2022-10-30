@@ -32,7 +32,7 @@
       :postsCountf="postsCountf"
       style="align-self: flex"
       @remove="removePost"
-      :postsprops="sortedPosts"
+      :postsprops="posts"
     />
     <div v-if="isPostLoading">*** идет загрузка***</div>
   </div>
@@ -65,9 +65,7 @@ export default {
       this.postsCountf = this.posts.length;
     },
     clearAll() {
-      while (this.posts.length > 0) {
-        this.posts.pop();
-      }
+      this.posts = this.posts.filter((p) => p.id === 0);
     },
     createPost(post) {
       this.posts.push(post);

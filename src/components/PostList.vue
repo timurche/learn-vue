@@ -1,12 +1,12 @@
 <template>
   <div v-if="postsprops.length > 0">
     <h3>Посты: {{ postsCountf }} шт.</h3>
-    <transition-group name="">
+    <transition-group name="post-list">
       <post-item
         :post="post"
-        :key="post.id"
         @remove="$emit('remove', post)"
         v-for="post in postsprops"
+        :key="post.id"
       />
     </transition-group>
   </div>
@@ -28,4 +28,18 @@ export default {
 </script>
 
 <style scoped>
+.post-list-move, /* apply transition to moving elements */
+.post-list-enter-active,
+.post-list-leave-active {
+  transition: all 0.5s ease;
+}
+
+.post-list-enter-from,
+.post-list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+.post-list-leave-active {
+  position: absolute;
+}
 </style>
