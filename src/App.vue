@@ -2,17 +2,6 @@
   <div class="app">
     <div style="display: flex">
       <my-button class="crtBtn" @click="showDialog"> Создать пост </my-button>
-      <my-input
-        v-model="limit"
-        placeholder="лимит"
-        type="number"
-        class="inlimit"
-      >
-        Лимит</my-input
-      >
-      <my-button class="crtBtn" @click="fetchPosts(limit)"
-        >Получить посты: {{ limit }} шт.</my-button
-      >
 
       <my-button @click="clearAll" class="crtBtnclr crtBtn"
         >Очистить посты</my-button
@@ -20,7 +9,13 @@
     </div>
     <div class="filters">
       <h4>Сортировка:</h4>
-      <my-select v-model="selectedOption" :options="sortOptions" />
+      <my-select
+        class="mySelect"
+        v-model="selectedOption"
+        :options="sortOptions"
+      />
+      <h4>Поиск:</h4>
+      <my-input v-model="searchInput" placeholder="Вводи...">554545</my-input>
     </div>
 
     <my-dialog v-model:show="dialogVisible">
@@ -32,9 +27,20 @@
       :postsCountf="postsCountf"
       style="align-self: flex"
       @remove="removePost"
-      :postsprops="posts"
+      :postsprops="sortedAndSearchedPosts"
     />
     <div v-if="isPostLoading">*** идет загрузка***</div>
+  </div>
+  <div class="pagination__wrapper">
+    <div
+      class="pageItem"
+      v-for="pageNumber in totalPages"
+      :key="pageNumber"
+      :class="{ pageItemCurrent: pageNumber === pageNum }"
+      @click="changePage(pageNumber)"
+    >
+      {{ pageNumber }}
+    </div>
   </div>
 </template>
 
@@ -47,9 +53,12 @@ export default {
   components: { postForm, postList },
   data() {
     return {
+      searchInput: "",
       posts: [],
       dialogVisible: false,
-      limit: 10,
+      pageNum: 1,
+      pageLimit: 5,
+      totalPages: 0,
       isPostLoading: false,
       postsCountf: 0,
       selectedOption: "",
@@ -61,6 +70,10 @@ export default {
   },
 
   methods: {
+    changePage(pageNumber) {
+      this.pageNum = pageNumber;
+      this.fetchPosts();
+    },
     countPostsNow() {
       this.postsCountf = this.posts.length;
     },
@@ -77,15 +90,23 @@ export default {
     showDialog() {
       this.dialogVisible = true;
     },
-    async fetchPosts(limit) {
+    async fetchPosts() {
       try {
         this.isPostLoading = true;
         setTimeout(async () => {
-          this.limit = limit;
           const response = await axios.get(
-            "https://jsonplaceholder.typicode.com/posts?_limit=" + this.limit
+            "https://jsonplaceholder.typicode.com/posts",
+            {
+              params: {
+                _page: this.pageNum,
+                _limit: this.pageLimit,
+              },
+            }
           );
-          this.posts = this.posts.concat(response.data);
+          this.totalPages = Math.ceil(
+            response.headers["x-total-count"] / this.pageLimit
+          );
+          this.posts = response.data;
           this.isPostLoading = false;
         }, 1000);
       } catch (e) {
@@ -95,13 +116,18 @@ export default {
     },
   },
   mounted() {
-    this.fetchPosts(10);
+    this.fetchPosts();
   },
 
   computed: {
     sortedPosts() {
       return [...this.posts].sort((post1, post2) =>
         post1[this.selectedOption]?.localeCompare(post2[this.selectedOption])
+      );
+    },
+    sortedAndSearchedPosts() {
+      return this.sortedPosts.filter((post) =>
+        post.title.toLowerCase().includes(this.searchInput.toLowerCase())
       );
     },
   },
@@ -149,7 +175,22 @@ export default {
 }
 .filters {
   display: flex;
-  justify-content: none;
-  margin: 0 0 15px 0;
+  align-items: center;
+}
+.mySelect {
+  margin-right: 15px;
+}
+.pagination__wrapper {
+  display: flex;
+  margin: 15px 0 0 10px;
+}
+.pageItem {
+  padding: 8px 12px 8px 12px;
+  cursor: pointer;
+}
+.pageItemCurrent {
+  background-color: grey;
+  color: white;
+  border-radius: 5px;
 }
 </style>
