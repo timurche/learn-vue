@@ -9,7 +9,10 @@
       <my-button class="delButton" @click="$emit('remove', post)">
         Удалить
       </my-button>
-      <my-button class="openButton" @click="$emit('remove', post)">
+      <my-button
+        class="openButton"
+        @click="$router.push('/myposts/${post.id}')"
+      >
         Открыть
       </my-button>
     </div>
