@@ -6,7 +6,7 @@
 export default {
   data() {},
   mounted() {
-    console.log(this.$route.params);
+
   },
 };
 </script>
