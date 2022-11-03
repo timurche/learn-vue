@@ -1,5 +1,5 @@
 <template>
-  <div>Страница поста ID = {{ $route.params.id }}</div>
+  <div>Страница поста ID : {{ $route.params.id }}</div>
 </template>
 
 <script>
