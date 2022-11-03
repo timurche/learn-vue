@@ -3,10 +3,7 @@
 </template>
 
 <script>
-export default {
-  data() {},
-  mounted() {},
-};
+export default {};
 </script>
 
 <style scoped>
