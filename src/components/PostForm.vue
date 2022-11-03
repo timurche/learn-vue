@@ -5,6 +5,7 @@
       class="postInput"
       type="text"
       placeholder="Заголовок"
+      v-focus
     />
     <my-input
       v-model.trim="post.body"
