@@ -4,7 +4,7 @@
     <div class="nav__list">
       <ul class="nav-list">
         <li @click="$router.push('/myposts')">Посты</li>
-        <li @click="$router.push('/about')">О нас</li>
+        <li @click="$router.push('/aboutUs')">О нас</li>
       </ul>
     </div>
   </div>

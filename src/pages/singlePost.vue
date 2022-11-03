@@ -5,9 +5,7 @@
 <script>
 export default {
   data() {},
-  mounted() {
-
-  },
+  mounted() {},
 };
 </script>
 

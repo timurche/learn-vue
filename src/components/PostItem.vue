@@ -12,7 +12,7 @@
 
       <my-button
         class="openButton"
-        @click="$router.push('/myposts/${post.id}')"
+        @click="$router.push(`/myposts/${post.id}`)"
       >
         Открыть
       </my-button>

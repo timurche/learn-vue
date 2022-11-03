@@ -13,7 +13,7 @@ const routes = [
     component: postsPage
   },
   {
-    path: "/about",
+    path: "/aboutUs",
     component: aboutUs
   },
   {
