@@ -1,6 +1,8 @@
 <template>
   <div class="navbar">
-    <div @click="$router.push('/')"><h4>SiteLogo!</h4></div>
+    <div style="cursor: pointer" @click="$router.push('/')">
+      <h4>SiteLogo!</h4>
+    </div>
     <div class="nav__list">
       <ul class="nav-list">
         <li @click="$router.push('/myposts')">Посты</li>
@@ -35,5 +37,6 @@ export default {};
 li {
   list-style-type: none;
   padding: 5px;
+  cursor: pointer;
 }
 </style>
