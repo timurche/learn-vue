@@ -3,6 +3,7 @@ import postsPage from "@/pages/postsPage";
 import singlePost from "@/pages/singlePost";
 import { createRouter, createWebHistory } from "vue-router";
 import allaboutus from "@/pages/allaboutus";
+import store from "@/pages/store";
 
 const routes = [
   {
@@ -23,7 +24,7 @@ const routes = [
   },
   {
     path: "/store",
-    component: singlePost
+    component: store
   }
 ];
 
