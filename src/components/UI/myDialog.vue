@@ -8,10 +8,9 @@
 
 <script>
 import toggleMixin from "@/mixins/toggleMixin";
-import helloMixin from "@/mixins/helloMixin";
 export default {
   name: "my-dialog",
-  mixins: [toggleMixin, helloMixin],
+  mixins: [toggleMixin],
 };
 </script>
 

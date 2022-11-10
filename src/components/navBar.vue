@@ -5,6 +5,7 @@
       <ul class="nav-list">
         <li @click="$router.push('/myposts')">Посты</li>
         <li @click="$router.push('/aboutUs')">О нас</li>
+        <li @click="$router.push('/store')">Store</li>
       </ul>
     </div>
   </div>
