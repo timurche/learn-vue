@@ -156,18 +156,7 @@ export default {
     observer.observe(this.$refs.observer); */
   },
 
-  computed: {
-    sortedPosts() {
-      return [...this.posts].sort((post1, post2) =>
-        post1[this.selectedOption]?.localeCompare(post2[this.selectedOption])
-      );
-    },
-    sortedAndSearchedPosts() {
-      return this.sortedPosts.filter((post) =>
-        post.title.toLowerCase().includes(this.searchInput.toLowerCase())
-      );
-    },
-  },
+  computed: {},
 
   watch: {
     posts: {
