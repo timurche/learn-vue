@@ -1,3 +1,4 @@
+import axios from "axios";
 export const postModule = {
   state: () => ({
     searchInput: "",
@@ -20,8 +21,8 @@ export const postModule = {
         post1[state.selectedOption]?.localeCompare(post2[state.selectedOption])
       );
     },
-    sortedAndSearchedPosts(state) {
-      return state.sortedPosts.filter((post) =>
+    sortedAndSearchedPosts(state, getters) {
+      return getters.sortedPosts.filter((post) =>
         post.title.toLowerCase().includes(state.searchInput.toLowerCase())
       );
     }
@@ -52,5 +53,55 @@ export const postModule = {
       state.selectedOption = selectedOption;
     }
   },
-  actions: {}
+  actions: {
+    async fetchPosts({ state, commit }) {
+      try {
+        commit("setIsPostLoading", true);
+
+        const response = await axios.get(
+          "https://jsonplaceholder.typicode.com/posts",
+          {
+            params: {
+              _page: state.pageNum,
+              _limit: state.pageLimit
+            }
+          }
+        );
+        commit(
+          "setTotalPages",
+          Math.ceil(response.headers["x-total-count"] / this.pageLimit)
+        );
+        commit("setPosts", response.data);
+      } catch (e) {
+        alert(e);
+      } finally {
+        commit("setIsPostLoading", false);
+      }
+    },
+    async loadMorePosts({ state, commit }) {
+      try {
+        commit("setPageNum", state.pageNum + 1);
+        commit("setIsPostLoading", true);
+
+        const response = await axios.get(
+          "https://jsonplaceholder.typicode.com/posts",
+          {
+            params: {
+              _page: state.pageNum,
+              _limit: state.pageLimit
+            }
+          }
+        );
+        commit(
+          "setTotalPages",
+          Math.ceil(response.headers["x-total-count"] / this.pageLimit)
+        );
+        commit("setPosts", [...state.posts, ...response.data]);
+      } catch (e) {
+        alert(e);
+      } finally {
+        commit("setIsPostLoading", false);
+      }
+    }
+  }
 };

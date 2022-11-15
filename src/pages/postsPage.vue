@@ -92,53 +92,6 @@ export default {
     showDialog() {
       this.dialogVisible = true;
     },
-    async fetchPosts() {
-      try {
-        this.isPostLoading = true;
-
-        const response = await axios.get(
-          "https://jsonplaceholder.typicode.com/posts",
-          {
-            params: {
-              _page: this.pageNum,
-              _limit: this.pageLimit,
-            },
-          }
-        );
-        this.totalPages = Math.ceil(
-          response.headers["x-total-count"] / this.pageLimit
-        );
-        this.posts = response.data;
-        this.isPostLoading = false;
-      } catch (e) {
-        /** alert(e);*/
-      } finally {
-      }
-    },
-    async loadMorePosts() {
-      try {
-        this.pageNum += 1;
-        this.isPostLoading = true;
-
-        const response = await axios.get(
-          "https://jsonplaceholder.typicode.com/posts",
-          {
-            params: {
-              _page: this.pageNum,
-              _limit: this.pageLimit,
-            },
-          }
-        );
-        this.totalPages = Math.ceil(
-          response.headers["x-total-count"] / this.pageLimit
-        );
-        this.posts = [...this.posts, ...response.data];
-        this.isPostLoading = false;
-      } catch (e) {
-        /** alert(e);*/
-      } finally {
-      }
-    },
   },
   mounted() {
     this.fetchPosts();
