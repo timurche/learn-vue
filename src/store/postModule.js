@@ -69,9 +69,9 @@ export const postModule = {
         );
         commit(
           "setTotalPages",
-          Math.ceil(response.headers["x-total-count"] / this.pageLimit)
+          Math.ceil(response.headers["x-total-count"] / state.pageLimit)
         );
-        commit("setPosts", response.data);
+        commit("setPosts", [...response.data]);
       } catch (e) {
         alert(e);
       } finally {
@@ -103,5 +103,6 @@ export const postModule = {
         commit("setIsPostLoading", false);
       }
     }
-  }
+  },
+  namespaced: true
 };

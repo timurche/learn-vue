@@ -24,7 +24,6 @@
     </my-dialog>
 
     <post-list
-      :postsCountf="postsCountf"
       style="align-self: flex"
       @remove="removePost"
       :postsprops="sortedAndSearchedPosts"
@@ -62,7 +61,6 @@ export default {
       pageLimit: 10,
       totalPages: 0,
       isPostLoading: false,
-      postsCountf: 0,
       selectedOption: "",
       sortOptions: [
         { value: "title", name: "По названию" },
@@ -76,9 +74,7 @@ export default {
       this.pageNum = pageNumber;
       //this.fetchPosts();
     },
-    countPostsNow() {
-      this.postsCountf = this.posts.length;
-    },
+
     clearAll() {
       this.posts = this.posts.filter((p) => p.id === 0);
     },

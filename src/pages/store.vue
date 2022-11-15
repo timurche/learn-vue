@@ -1,26 +1,88 @@
 <template>
   <div>
-    <div>
-      <h3>
-        {{ $store.state.isAuth ? "Авторизован" : "Чужак" }}
-      </h3>
-      <my-button
-        v-if="$store.state.isAuth == false"
-        @click="$store.commit('authNow')"
-        >Войти</my-button
+    <div style="display: flex">
+      <my-button class="crtBtn" @click="showDialog"> Создать пост </my-button>
+
+      <my-button @click="clearAll" class="crtBtnclr crtBtn"
+        >Очистить посты</my-button
       >
     </div>
-
-    <div>
-      {{ $store.getters.likesView }}
-      <my-button @click="$store.commit('incLike')"> 👍 </my-button>
-      <my-button @click="$store.commit('decLike')"> 👎 </my-button>
+    <div class="filters">
+      <h4>Сортировка:</h4>
+      <!-- <my-select
+        class="mySelect"
+        v-model="selectedOption"
+        :options="sortOptions"
+      /> -->
+      <h4>Поиск:</h4>
+      <!-- <my-input v-model="searchInput" placeholder="Вводи..."></my-input> -->
     </div>
+
+    <!--  <my-dialog v-model:show="dialogVisible">
+      <h4>Создание поста</h4>
+      <post-form @create="createPost" />
+    </my-dialog> -->
+
+    <post-list
+      style="align-self: flex"
+      @remove="removePost"
+      :postsprops="sortedAndSearchedPosts"
+    />
+    <div v-if="isPostLoading">*** идет загрузка***</div>
   </div>
+  <div v-intersection="loadMorePosts" class="observer"></div>
 </template>
 
 <script>
-export default {};
+import postForm from "@/components/PostForm";
+import postList from "@/components/PostList";
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+export default {
+  components: { postForm, postList },
+  methods: {
+    ...mapMutations({
+      setPage: "post/setPage",
+    }),
+    ...mapActions({
+      fetchPosts: "post/fetchPosts",
+      //loadMorePosts: "post/loadMorePosts",
+    }),
+    changePage(pageNumber) {
+      this.pageNum = pageNumber;
+      //this.fetchPosts();
+    },
+    clearAll() {
+      this.posts = this.posts.filter((p) => p.id === 0);
+    },
+    createPost(post) {
+      this.posts.push(post);
+      this.dialogVisible = false;
+    },
+    removePost(post) {
+      this.posts = this.posts.filter((p) => p.id !== post.id);
+    },
+    showDialog() {
+      this.dialogVisible = true;
+    },
+  },
+  computed: {
+    ...mapState({
+      searchInput: (state) => state.post.searchInput,
+      posts: (state) => state.post.posts,
+      dialogVisible: (state) => state.post.dialogVisible,
+      pageNum: (state) => state.post.pageNum,
+      pageLimit: (state) => state.post.pageLimit,
+      totalPages: (state) => state.post.totalPages,
+      isPostLoading: (state) => state.post.isPostLoading,
+      selectedOption: (state) => state.post.selectedOption,
+      sortOptions: (state) => state.post.sortOptions,
+    }),
+    ...mapGetters({
+      sortedPosts: "post/sortedPosts",
+      sortedAndSearchedPosts: "post/sortedAndSearchedPosts",
+    }),
+  },
+};
 </script>
 
 <style scoped>
