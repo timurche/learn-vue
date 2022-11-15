@@ -106,20 +106,6 @@ export default {
   },
 
   computed: {},
-
-  watch: {
-    posts: {
-      handler(val, oldVal) {
-        this.countPostsNow();
-      },
-      deep: true,
-    },
-    selectedOption(newValue) {
-      this.posts.sort((post1, post2) =>
-        post1[newValue]?.localeCompare(post2[newValue])
-      );
-    },
-  },
 };
 </script>
 

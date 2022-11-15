@@ -9,19 +9,24 @@
     </div>
     <div class="filters">
       <h4>Сортировка:</h4>
-      <!-- <my-select
+      <my-select
         class="mySelect"
-        v-model="selectedOption"
+        :model-value="selectedOption"
+        @update:model-value="setSelectedOption"
         :options="sortOptions"
-      /> -->
+      />
       <h4>Поиск:</h4>
-      <!-- <my-input v-model="searchInput" placeholder="Вводи..."></my-input> -->
+      <my-input
+        :model-value="searchInput"
+        @update:model-value="setSearchInput"
+        placeholder="Вводи..."
+      ></my-input>
     </div>
 
-    <!--  <my-dialog v-model:show="dialogVisible">
+    <my-dialog v-model:show="dialogVisible">
       <h4>Создание поста</h4>
       <post-form @create="createPost" />
-    </my-dialog> -->
+    </my-dialog>
 
     <post-list
       style="align-self: flex"
@@ -38,14 +43,21 @@ import postForm from "@/components/PostForm";
 import postList from "@/components/PostList";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 export default {
+  data() {
+    return {
+      dialogVisible: false,
+    };
+  },
   components: { postForm, postList },
   methods: {
     ...mapMutations({
       setPage: "post/setPage",
+      setSearchInput: "post/setSearchInput",
+      setSelectedOption: "post/setSelectedOption",
     }),
     ...mapActions({
       fetchPosts: "post/fetchPosts",
-      //loadMorePosts: "post/loadMorePosts",
+      loadMorePosts: "post/loadMorePosts",
     }),
     changePage(pageNumber) {
       this.pageNum = pageNumber;
@@ -64,6 +76,9 @@ export default {
     showDialog() {
       this.dialogVisible = true;
     },
+  },
+  mounted() {
+    this.fetchPosts();
   },
   computed: {
     ...mapState({

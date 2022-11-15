@@ -1,6 +1,6 @@
 <template>
   <div v-if="postsprops.length > 0">
-    <h3>Посты: {{ postsCountf }} шт.</h3>
+    <h3>Посты</h3>
     <transition-group name="post-list">
       <post-item
         :post="post"
@@ -22,7 +22,6 @@ export default {
       type: Array,
       required: true,
     },
-    postsCountf: { type: Number },
   },
 };
 </script>
