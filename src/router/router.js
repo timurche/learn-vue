@@ -4,7 +4,7 @@ import singlePost from "@/pages/singlePost";
 import { createRouter, createWebHistory } from "vue-router";
 import allaboutus from "@/pages/allaboutus";
 import store from "@/pages/store";
-
+import compApi from "@/pages/compApi";
 const routes = [
   {
     path: "/",
@@ -25,6 +25,10 @@ const routes = [
   {
     path: "/store",
     component: store
+  },
+  {
+    path: "/compapi",
+    component: compApi
   }
 ];
 
