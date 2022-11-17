@@ -88,6 +88,48 @@ export default {
     showDialog() {
       this.dialogVisible = true;
     },
+    async fetchPosts() {
+      try {
+        this.isPostsLoading = true;
+        const response = await axios.get(
+          "https://jsonplaceholder.typicode.com/posts",
+          {
+            params: {
+              _page: this.pageNum,
+              _limit: this.pageLimit,
+            },
+          }
+        );
+        this.totalPages = Math.ceil(
+          response.headers["x-total-count"] / this.pageLimit
+        );
+        this.posts = response.data;
+      } catch (e) {
+        alert("Ошибка");
+      } finally {
+        this.isPostsLoading = false;
+      }
+    },
+    async loadMorePosts() {
+      try {
+        this.pageNum += 1;
+        const response = await axios.get(
+          "https://jsonplaceholder.typicode.com/posts",
+          {
+            params: {
+              _page: this.pageNum,
+              _limit: this.pageLimit,
+            },
+          }
+        );
+        this.totalPages = Math.ceil(
+          response.headers["x-total-count"] / this.pageLimit
+        );
+        this.posts = [...this.posts, ...response.data];
+      } catch (e) {
+        alert("Ошибка");
+      }
+    },
   },
   mounted() {
     this.fetchPosts();
@@ -105,7 +147,18 @@ export default {
     observer.observe(this.$refs.observer); */
   },
 
-  computed: {},
+  computed: {
+    sortedPosts() {
+      return [...this.posts].sort((post1, post2) =>
+        post1[this.selectedOption]?.localeCompare(post2[this.selectedOption])
+      );
+    },
+    sortedAndSearchedPosts() {
+      return this.sortedPosts.filter((post) =>
+        post.title.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+    },
+  },
 };
 </script>
 

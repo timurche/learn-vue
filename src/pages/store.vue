@@ -2,7 +2,6 @@
   <div>
     <div style="display: flex">
       <my-button class="crtBtn" @click="showDialog"> Создать пост </my-button>
-
       <my-button @click="clearAll" class="crtBtnclr crtBtn"
         >Очистить посты</my-button
       >
