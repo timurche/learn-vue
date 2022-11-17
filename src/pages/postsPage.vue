@@ -155,7 +155,7 @@ export default {
     },
     sortedAndSearchedPosts() {
       return this.sortedPosts.filter((post) =>
-        post.title.toLowerCase().includes(this.searchQuery.toLowerCase())
+        post.title.toLowerCase().includes(this.searchInput.toLowerCase())
       );
     },
   },
