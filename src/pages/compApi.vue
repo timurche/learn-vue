@@ -30,134 +30,46 @@
     />
     <div v-if="isPostLoading">*** идет загрузка***</div>
   </div>
-  <div v-intersection="loadMorePosts" class="observer"></div>
-  <!-- <div class="pagination__wrapper">
-    
-    <div
-      class="pageItem"
-      v-for="pageNumber in totalPages"
-      :key="pageNumber"
-      :class="{ pageItemCurrent: pageNumber === pageNum }"
-      @click="changePage(pageNumber)"
-    >
-      {{ pageNumber }}
-    </div>
-  </div> -->
+  <div v-intersection="loadMorePostsApi" class="observer"></div>
 </template>
 
 <script>
 import postForm from "@/components/PostForm";
 import postList from "@/components/PostList";
-import axios from "axios";
-
+import usePosts from "@/hooks/usePosts";
+import useSortedPosts from "@/hooks/useSortedPosts";
+import useSortedAndSearchedPosts from "@/hooks/useSortedAndSearchedPosts";
 export default {
   components: { postForm, postList },
   data() {
     return {
-      searchInput: "",
-      posts: [],
       dialogVisible: false,
-      pageNum: 1,
-      pageLimit: 10,
-      totalPages: 0,
-      isPostLoading: false,
-      selectedOption: "",
       sortOptions: [
         { value: "title", name: "По названию" },
         { value: "body", name: "По описанию" },
       ],
     };
   },
-
-  methods: {
-    changePage(pageNumber) {
-      this.pageNum = pageNumber;
-      //this.fetchPosts();
-    },
-
-    clearAll() {
-      this.posts = this.posts.filter((p) => p.id === 0);
-    },
-    createPost(post) {
-      this.posts.push(post);
-      this.dialogVisible = false;
-    },
-    removePost(post) {
-      this.posts = this.posts.filter((p) => p.id !== post.id);
-    },
-    showDialog() {
-      this.dialogVisible = true;
-    },
-    async fetchPosts() {
-      try {
-        this.isPostsLoading = true;
-        const response = await axios.get(
-          "https://jsonplaceholder.typicode.com/posts",
-          {
-            params: {
-              _page: this.pageNum,
-              _limit: this.pageLimit,
-            },
-          }
-        );
-        this.totalPages = Math.ceil(
-          response.headers["x-total-count"] / this.pageLimit
-        );
-        this.posts = response.data;
-      } catch (e) {
-        alert("Ошибка");
-      } finally {
-        this.isPostsLoading = false;
-      }
-    },
-    async loadMorePosts() {
-      try {
-        this.pageNum += 1;
-        const response = await axios.get(
-          "https://jsonplaceholder.typicode.com/posts",
-          {
-            params: {
-              _page: this.pageNum,
-              _limit: this.pageLimit,
-            },
-          }
-        );
-        this.totalPages = Math.ceil(
-          response.headers["x-total-count"] / this.pageLimit
-        );
-        this.posts = [...this.posts, ...response.data];
-      } catch (e) {
-        alert("Ошибка");
-      }
-    },
-  },
-  mounted() {
-    this.fetchPosts();
-    /* const options = {
-      rootMargin: "0px",
-      threshold: 1.0,
+  setup(postsprops, context) {
+    const { posts, isPostsLoading, totalPages, loadMorePostsApi } = usePosts(
+      10,
+      1
+    );
+    const { selectedOption, sortedPosts } = useSortedPosts(posts);
+    const { searchInput, sortedAndSearchedPosts } = useSortedAndSearchedPosts(
+      sortedPosts
+    );
+    context.expose({ loadMorePostsApi });
+    return {
+      posts,
+      totalPages,
+      isPostsLoading,
+      selectedOption,
+      sortedPosts,
+      searchInput,
+      sortedAndSearchedPosts,
+      loadMorePostsApi,
     };
-    const callback = (entries, observer) => {
-      //if (entries[0])
-      if (entries[0].isIntersecting && this.pageNum < this.totalPages) {
-        this.loadMorePosts();
-      }
-    };
-    const observer = new IntersectionObserver(callback, options);
-    observer.observe(this.$refs.observer); */
-  },
-
-  computed: {
-    sortedPosts() {
-      return [...this.posts].sort((post1, post2) =>
-        post1[this.selectedOption]?.localeCompare(post2[this.selectedOption])
-      );
-    },
-    sortedAndSearchedPosts() {
-      return this.sortedPosts.filter((post) =>
-        post.title.toLowerCase().includes(this.searchInput.toLowerCase())
-      );
-    },
   },
 };
 </script>

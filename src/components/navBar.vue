@@ -8,7 +8,7 @@
         <li @click="$router.push('/myposts')">Посты</li>
         <li @click="$router.push('/allaboutus')">О нас</li>
         <li @click="$router.push('/store')">Store</li>
-        <li @click="$router.push('/compapi')">Вычислю по api</li>
+        <li @click="$router.push('/compapi')">Composition API</li>
       </ul>
     </div>
   </div>
