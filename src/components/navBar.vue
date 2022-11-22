@@ -8,7 +8,7 @@
         <li @click="$router.push('/myposts')">Посты</li>
         <li @click="$router.push('/allaboutus')">О нас</li>
         <li @click="$router.push('/store')">Store</li>
-        <li @click="$router.push('/compapi')">вычислю по api</li>
+        <li @click="$router.push('/compapi')">Вычислю по api</li>
       </ul>
     </div>
   </div>
@@ -37,7 +37,7 @@ export default {};
 }
 li {
   list-style-type: none;
-  padding: 5px;
+  padding: 15px;
   cursor: pointer;
 }
 </style>
